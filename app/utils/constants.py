@@ -1,0 +1,116 @@
+from __future__ import annotations
+
+KEY_TO_CODE: dict[str, str] = {
+    "Ability & Aptitude": "A",
+    "Assessment Exercises": "E",
+    "Biodata & Situational Judgment": "B",
+    "Competencies": "C",
+    "Development & 360": "D",
+    "Knowledge & Skills": "K",
+    "Personality & Behavior": "P",
+    "Simulations": "S",
+}
+
+ASSESSMENT_TYPE_TO_KEYS: dict[str, set[str]] = {
+    "ability": {"Ability & Aptitude"},
+    "aptitude": {"Ability & Aptitude"},
+    "cognitive": {"Ability & Aptitude"},
+    "reasoning": {"Ability & Aptitude"},
+    "technical": {"Knowledge & Skills", "Simulations"},
+    "knowledge": {"Knowledge & Skills"},
+    "skills": {"Knowledge & Skills", "Competencies"},
+    "coding": {"Knowledge & Skills", "Simulations"},
+    "simulation": {"Simulations"},
+    "personality": {"Personality & Behavior"},
+    "behavioral": {"Personality & Behavior", "Biodata & Situational Judgment"},
+    "competency": {"Competencies"},
+    "sjt": {"Biodata & Situational Judgment"},
+    "situational judgement": {"Biodata & Situational Judgment"},
+    "situational judgment": {"Biodata & Situational Judgment"},
+    "development": {"Development & 360", "Competencies"},
+}
+
+SENIORITY_TO_LEVELS: dict[str, set[str]] = {
+    "entry": {"Entry-Level", "Graduate", "General Population"},
+    "graduate": {"Graduate", "Entry-Level", "General Population"},
+    "junior": {"Entry-Level", "Graduate", "General Population"},
+    "mid": {"Mid-Professional", "General Population"},
+    "senior": {"Mid-Professional", "Manager", "Supervisor", "Director"},
+    "lead": {"Manager", "Supervisor", "Director", "Front Line Manager"},
+    "manager": {"Manager", "Front Line Manager", "Supervisor"},
+    "director": {"Director", "Executive"},
+    "executive": {"Executive", "Director"},
+}
+
+CONFIRMATION_TERMS = {
+    "confirmed",
+    "confirm",
+    "perfect",
+    "that works",
+    "that's good",
+    "that covers it",
+    "lock",
+    "locking it in",
+    "go ahead",
+    "yes",
+    "thanks",
+    "thank you",
+    "final",
+}
+
+TECHNICAL_SKILL_ALIASES: dict[str, set[str]] = {
+    "Core Java": {"core java", "java"},
+    "Spring": {"spring", "spring boot"},
+    "RESTful Web Services": {"rest", "rest api", "restful", "api design"},
+    "SQL": {"sql", "relational database", "relational databases"},
+    "AWS": {"aws", "amazon web services"},
+    "Docker": {"docker", "container", "containers"},
+    "Angular": {"angular"},
+    "JavaScript": {"javascript", "front end", "frontend"},
+    "Linux": {"linux"},
+    "Networking": {"networking", "network infrastructure"},
+    "Rust": {"rust"},
+    "Excel": {"excel", "spreadsheet"},
+    "Word": {"word", "microsoft word"},
+    "HIPAA": {"hipaa"},
+    "Medical Terminology": {"medical terminology"},
+    "Data Entry": {"data entry"},
+    "Numerical Reasoning": {"numerical", "numerical reasoning"},
+    "Basic Statistics": {"statistics", "stats"},
+    "Financial Accounting": {"finance", "financial", "accounting"},
+}
+
+FAMILY_PATTERNS: dict[str, tuple[str, ...]] = {
+    "Automata": ("automata",),
+    "OPQ": ("opq", "occupational personality questionnaire"),
+    "Verify": ("verify", "g+"),
+    "SVAR": ("svar",),
+    "Microsoft Office": ("microsoft", "ms excel", "ms word", "ms office", "ms powerpoint"),
+    "Global Skills": ("global skills", "gsa"),
+    "Sales Transformation": ("sales transformation",),
+    "Contact Center": ("contact center", "customer service phone", "sales & service phone"),
+    "Graduate Scenarios": ("graduate scenarios",),
+    "Safety": ("safety", "dependability", "dsi"),
+}
+
+PRODUCT_ALIASES: dict[str, str] = {
+    "opq": "Occupational Personality Questionnaire OPQ32r",
+    "opq32r": "Occupational Personality Questionnaire OPQ32r",
+    "occupational personality questionnaire": "Occupational Personality Questionnaire OPQ32r",
+    "gsa": "Global Skills Assessment",
+    "global skills": "Global Skills Assessment",
+    "global skills development": "Global Skills Development Report",
+    "verify g+": "SHL Verify Interactive G+",
+    "interactive g+": "SHL Verify Interactive G+",
+    "g+": "SHL Verify Interactive G+",
+    "dsi": "Dependability and Safety Instrument (DSI)",
+    "safety & dependability 8.0": "Manufac. & Indust. - Safety & Dependability 8.0",
+    "safety and dependability 8.0": "Manufac. & Indust. - Safety & Dependability 8.0",
+    "graduate scenarios": "Graduate Scenarios",
+    "hipaa": "HIPAA (Security)",
+    "svar us": "SVAR - Spoken English (US) (New)",
+    "spoken english us": "SVAR - Spoken English (US) (New)",
+    "spoken english uk": "SVAR - Spoken English (U.K.)",
+    "spoken english aus": "SVAR - Spoken English (AUS)",
+    "spoken english indian": "SVAR - Spoken English (Indian Accent) (New)",
+}

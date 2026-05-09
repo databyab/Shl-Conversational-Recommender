@@ -17,11 +17,11 @@ from app.utils.logger import get_logger
 logger = get_logger(__name__)
 
 
-def _recommendations(items: list[CatalogItem], max_count: int = 5) -> list[Recommendation]:
+def _recommendations(items: list[CatalogItem], max_count: int = 3) -> list[Recommendation]:
     """Convert catalog items to API recommendations.
     
-    Returns 3-5 high-confidence recommendations by default.
-    Only expand beyond 5 if explicitly requested by user.
+    Returns 3 strong recommendations by default (precise, recruiter-curated shortlist).
+    Expands to 5 for refinements, up to 10 only if explicitly requested by user.
     """
     return [Recommendation(**item.to_recommendation()) for item in items[:max_count]]
 
@@ -32,9 +32,10 @@ def _why_line(item: CatalogItem, state: HiringState) -> str:
     Uses professional templates based on assessment metadata.
     Avoids mechanical keyword overlap explanations.
     """
-    # STOPWORDS to filter out from matching
+    # STOPWORDS to filter out from matching: weak or noisy tokens
     stopwords = {"and", "or", "the", "a", "an", "assessment", "test", "need", "role", 
-                 "hiring", "evaluates", "measures", "assesses", "with", "for", "in", "to"}
+                 "hiring", "evaluates", "measures", "assesses", "with", "for", "in", "to",
+                 "developer", "development", "experience", "level", "interview", "tool", "suite"}
     
     # Get clean skill matches (filtered stopwords)
     skill_matches = []
@@ -177,10 +178,15 @@ class ChatController:
         items = self.engine.recommend(state)
         reply = _format_reply(items, state, intent)
         
-        # Determine recommendation count: 5 normally, more only if explicitly requested
-        max_recs = 5
+        # Determine recommendation count:
+        # Default: 3 strong recommendations (precise recruiter shortlist)
+        # Refinement: 5 if user is refining/confirming
+        # Full list: 10 if user explicitly requests "all" / "more" / "full list"
+        max_recs = 3
         latest_msg = normalize_text(state.latest_user_message or "")
-        if any(term in latest_msg for term in ("all", "more", "all recommendations", "full list")):
+        if intent in (Intent.REFINE, Intent.CONFIRM):
+            max_recs = 5
+        if any(term in latest_msg for term in ("all", "more", "all recommendations", "full list", "everything")):
             max_recs = 10
         
         # Only set end_of_conversation=true if user explicitly confirmed AND we have recommendations

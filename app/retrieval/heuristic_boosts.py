@@ -157,6 +157,33 @@ def heuristic_score(item: CatalogItem, state: HiringState) -> float:
         if "Personality & Behavior" in item.keys:
             score += 0.32
 
+    # CONTRADICTION PENALTIES: Domain-specific incompatibilities
+    # Backend queries should not recommend frontend-heavy assessments
+    if _contains_any(query, ("backend", "java", "spring", "microservice", "server", "database", "sql", "dba")):
+        if _contains_any(name, ("front end", "frontend", "html", "css", "javascript", "react", "ui", "browser")):
+            score -= 0.45
+    
+    # Frontend queries should not recommend backend-heavy assessments
+    if _contains_any(query, ("frontend", "front end", "ui", "web", "react", "javascript", "css")):
+        if _contains_any(name, ("backend", "java", "spring", "microservice", "dba", "database", "sql", "server")):
+            score -= 0.45
+    
+    # Leadership/management queries should not recommend coding-heavy assessments
+    if _contains_any(query, ("leadership", "leader", "manager", "director", "executive", "cxo")):
+        if _contains_any(name, ("coding", "live coding", "automata", "html", "css", "javascript", "java", "python")):
+            score -= 0.35
+    
+    # Engineering queries should not recommend customer-support assessments
+    if _contains_any(query, ("engineer", "engineering", "backend", "frontend", "development", "developer")):
+        if _contains_any(name, ("customer service", "contact center", "inbound call", "phone simulation", "spoken english")):
+            score -= 0.40
+    
+    # Prefer primary assessments over report-only variants
+    # If user is asking for an assessment (not a report), penalize report-only items
+    if not _contains_any(query, ("report", "results", "feedback")):
+        if _contains_any(name, (" report", "report")) and not _contains_any(name, ("assessment", "test", "ability", "coding", "verify", "opq32r")):
+            score -= 0.25
+
     if "drop" in latest or "remove" in latest or "exclude" in latest:
         for term in state.exclude_terms:
             if term and term in name:

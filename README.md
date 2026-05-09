@@ -197,15 +197,6 @@ Recommendations limited to top 5 (expandable to 10 on user request). Reranker re
 - State reconstructed from message history each turn
 - No database, no session storage
 
-## Deployment
-
-See [DEPLOYMENT.md](DEPLOYMENT.md) for production setup on Render.
-
-Quick summary:
-- `Dockerfile` installs deps, preprocesses catalog, builds FAISS
-- `render.yaml` configures web service
-- `uvicorn app.main:app --host 0.0.0.0 --port 10000`
-- Set `GROQ_API_KEY` as Render environment secret
 
 ## Design Decisions
 
@@ -223,19 +214,4 @@ Quick summary:
 - Semantic search depends on query language matching catalog
 - Heuristic boosts are catalog-specific and require maintenance
 
-## Testing
 
-```bash
-# Unit tests
-pytest tests/
-
-# Replay evaluation on sample conversations
-python scripts/evaluate_recall.py
-
-# API check
-curl http://localhost:8000/health
-```
-
-## License
-
-SHL Assignment – Internal Use
